@@ -33,8 +33,9 @@
           <div>
             <p class="eyebrow">PACKING SLIP</p>
             <h2 id="slipTitle">Order</h2>
+            <p id="quantityWarning" class="quantity-warning" hidden></p>
           </div>
-          <button id="copyAllButton" class="copy-button copy-all" type="button">Copy all</button>
+          <button id="showCustomerButton" class="secondary-button" type="button">Show customer data</button>
         </div>
 
         <div id="fields" class="fields"></div>
@@ -45,6 +46,17 @@
         <button id="nextButton" class="nav-button primary-button" type="button">Next →</button>
       </nav>
     </section>
+
+    <dialog id="customerDialog" class="customer-dialog">
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow">REFERENCE ONLY</p>
+          <h2>Customer data</h2>
+        </div>
+        <button id="closeCustomerButton" class="dialog-close" type="button" aria-label="Close customer data">×</button>
+      </div>
+      <div id="customerData" class="customer-data"></div>
+    </dialog>
 
     <p id="status" class="status" role="status"></p>
   </main>

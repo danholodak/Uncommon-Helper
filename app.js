@@ -11,7 +11,11 @@ const pagePosition = document.querySelector("#pagePosition");
 const slipTitle = document.querySelector("#slipTitle");
 const previousButton = document.querySelector("#previousButton");
 const nextButton = document.querySelector("#nextButton");
-const copyAllButton = document.querySelector("#copyAllButton");
+const showCustomerButton = document.querySelector("#showCustomerButton");
+const quantityWarning = document.querySelector("#quantityWarning");
+const customerDialog = document.querySelector("#customerDialog");
+const customerData = document.querySelector("#customerData");
+const closeCustomerButton = document.querySelector("#closeCustomerButton");
 const newPdfButton = document.querySelector("#newPdfButton");
 const status = document.querySelector("#status");
 
@@ -159,7 +163,16 @@ function getDisplayFields(slip) {
     const firstCustomText = additionalInfo[0]?.[1];
 
     if (firstCustomText) {
-      fields.push(["File Name", `${toKebabCase(productName)}-${toKebabCase(firstCustomText)}`]);
+      const baseFileName = `${toKebabCase(productName)}-${toKebabCase(firstCustomText)}`;
+      const quantity = Number(slip.item.quantity);
+
+      fields.push(["File Name", baseFileName]);
+
+      if (quantity !== 1) {
+        for (let copyNumber = 2; copyNumber <= quantity; copyNumber++) {
+          fields.push([`File Name ${copyNumber}`, `${baseFileName}-${copyNumber}`]);
+        }
+      }
     }
   }
 
@@ -185,6 +198,16 @@ function render() {
   const orderNumber = slip.orderNumber ? `Order ${slip.orderNumber}` : "Packing Slip";
   const itemDescription = slip.item?.description ? ` — ${slip.item.description}` : "";
   slipTitle.textContent = `${orderNumber}${itemDescription}`;
+
+  const quantity = Number(slip.item?.quantity);
+  if (quantity !== 1) {
+    quantityWarning.hidden = false;
+    quantityWarning.textContent = `⚠ Quantity is ${quantity || "unknown"}. Check order before processing.`;
+  } else {
+    quantityWarning.hidden = true;
+    quantityWarning.textContent = "";
+  }
+
   previousButton.disabled = currentPage === 0;
   nextButton.disabled = currentPage === slips.length - 1;
   nextButton.textContent = currentPage === slips.length - 1 ? "Last page" : "Next →";
@@ -254,11 +277,45 @@ nextButton.addEventListener("click", () => {
   }
 });
 
-copyAllButton.addEventListener("click", () => {
-  const text = getDisplayFields(slips[currentPage])
-    .map(([label, value]) => `${label}: ${value}`)
-    .join("\n");
-  copyText(text, copyAllButton);
+showCustomerButton.addEventListener("click", () => {
+  const slip = slips[currentPage];
+  if (!slip) return;
+
+  customerData.replaceChildren();
+
+  for (const [sectionLabel, person] of [["Purchaser", slip.purchaser], ["Recipient", slip.recipient]]) {
+    for (const [label, value] of personFields(person)) {
+      const group = document.createElement("div");
+      group.className = "field-group";
+
+      const labelElement = document.createElement("span");
+      labelElement.className = "field-label";
+      labelElement.textContent = `${sectionLabel} ${label}`;
+
+      const row = document.createElement("div");
+      row.className = "copy-row";
+
+      const valueElement = document.createElement("div");
+      valueElement.className = "field-value";
+      valueElement.textContent = value;
+
+      const copyButton = document.createElement("button");
+      copyButton.className = "copy-button";
+      copyButton.type = "button";
+      copyButton.textContent = "Copy";
+      copyButton.addEventListener("click", () => copyText(String(value), copyButton));
+
+      row.append(valueElement, copyButton);
+      group.append(labelElement, row);
+      customerData.append(group);
+    }
+  }
+
+  customerDialog.showModal();
+});
+
+closeCustomerButton.addEventListener("click", () => {
+  customerDialog.close();
 });
 
 newPdfButton.addEventListener("click", () => {
