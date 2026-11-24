@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Packing Slip Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <p class="eyebrow">UNCOMMON HELPER</p>
+      <h1>Packing Slip Viewer</h1>
+    </header>
+
+    <section id="uploadPanel" class="panel upload-panel">
+      <label class="upload-zone" for="pdfInput">
+        <input id="pdfInput" type="file" accept="application/pdf,.pdf">
+        <span class="upload-icon">PDF</span>
+        <strong>Choose a packing-slip PDF</strong>
+        <span>Files stay in your browser</span>
+      </label>
+    </section>
+
+    <section id="viewer" class="viewer" hidden>
+      <div class="toolbar">
+        <button id="newPdfButton" class="secondary-button" type="button">Choose another PDF</button>
+        <div class="progress"><strong id="pagePosition">Page 1 of 1</strong></div>
+      </div>
+
+      <article class="panel slip-card">
+        <div class="card-heading">
+          <div>
+            <p class="eyebrow">PACKING SLIP</p>
+            <h2 id="slipTitle">Order</h2>
+          </div>
+          <button id="copyAllButton" class="copy-button copy-all" type="button">Copy all</button>
+        </div>
+
+        <div id="fields" class="fields"></div>
+      </article>
+
+      <nav class="navigation">
+        <button id="previousButton" class="nav-button" type="button">← Previous</button>
+        <button id="nextButton" class="nav-button primary-button" type="button">Next →</button>
+      </nav>
+    </section>
+
+    <p id="status" class="status" role="status"></p>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

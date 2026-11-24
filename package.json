@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "extract": "node extract-packing-slips.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx serve .",
+    "test": "echo \"No automated tests configured\""
   },
   "keywords": [],
   "author": "",
@@ -12,5 +13,8 @@
   "description": "",
   "dependencies": {
     "pdf-parse": "^2.4.5"
+  },
+  "devDependencies": {
+    "serve": "^14.2.8"
   }
 }
