@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Generated extraction output
+packing-slips.json
+*-packing-slips.json
+
+# Source PDFs may contain customer and shipping information
+*.pdf
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
