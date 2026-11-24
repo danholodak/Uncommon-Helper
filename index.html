@@ -11,13 +11,14 @@
     <header>
       <p class="eyebrow">UNCOMMON HELPER</p>
       <h1>Packing Slip Viewer</h1>
+      <nav id="pdfSelector" class="pdf-selector" aria-label="Uploaded packing-slip PDFs" hidden></nav>
     </header>
 
     <section id="uploadPanel" class="panel upload-panel">
       <label class="upload-zone" for="pdfInput">
-        <input id="pdfInput" type="file" accept="application/pdf,.pdf">
+        <input id="pdfInput" type="file" accept="application/pdf,.pdf" multiple>
         <span class="upload-icon">PDF</span>
-        <strong>Choose a packing-slip PDF</strong>
+        <strong>Choose packing-slip PDFs</strong>
         <span>Files stay in your browser</span>
       </label>
     </section>

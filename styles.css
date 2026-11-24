@@ -20,6 +20,25 @@ body {
 
 header { margin-bottom: 28px; }
 
+.pdf-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.pdf-tab {
+  border: 1px solid #d9d7cb;
+  background: #ebe8de;
+  color: #555b4d;
+}
+
+.pdf-tab.active {
+  border-color: #34392d;
+  background: #34392d;
+  color: white;
+}
+
 .eyebrow {
   margin: 0 0 6px;
   color: #7a806f;

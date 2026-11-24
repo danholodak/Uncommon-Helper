@@ -18,7 +18,10 @@ const customerData = document.querySelector("#customerData");
 const closeCustomerButton = document.querySelector("#closeCustomerButton");
 const newPdfButton = document.querySelector("#newPdfButton");
 const status = document.querySelector("#status");
+const pdfSelector = document.querySelector("#pdfSelector");
 
+let pdfFiles = [];
+let activePdfIndex = 0;
 let slips = [];
 let currentPage = 0;
 
@@ -244,20 +247,64 @@ function render() {
   }
 }
 
+function renderPdfSelector() {
+  pdfSelector.replaceChildren();
+
+  pdfFiles.forEach((pdf, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "pdf-tab";
+    button.textContent = pdf.label;
+
+    if (index === activePdfIndex) {
+      button.classList.add("active");
+      button.setAttribute("aria-current", "page");
+    }
+
+    button.addEventListener("click", () => {
+      pdfFiles[activePdfIndex].currentPage = currentPage;
+      activePdfIndex = index;
+      slips = pdfFiles[index].slips;
+      currentPage = pdfFiles[index].currentPage;
+      renderPdfSelector();
+      render();
+    });
+
+    pdfSelector.append(button);
+  });
+
+  pdfSelector.hidden = pdfFiles.length <= 1;
+}
+
 pdfInput.addEventListener("change", async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
+  const files = Array.from(event.target.files);
+  if (!files.length) return;
 
   try {
-    slips = await extractPdf(file);
+    pdfFiles = [];
+
+    for (const file of files) {
+      status.textContent = `Reading ${file.name}…`;
+      const extractedSlips = await extractPdf(file);
+      pdfFiles.push({
+        fileName: file.name,
+        label: extractedSlips[0]?.item?.description || file.name,
+        slips: extractedSlips,
+        currentPage: 0,
+      });
+    }
+
+    activePdfIndex = 0;
+    slips = pdfFiles[0].slips;
     currentPage = 0;
     status.textContent = "";
     uploadPanel.hidden = true;
     viewer.hidden = false;
+    renderPdfSelector();
     render();
   } catch (error) {
     console.error(error);
-    status.textContent = `Could not read this PDF: ${error.message}`;
+    status.textContent = `Could not read one of the PDFs: ${error.message}`;
   } finally {
     pdfInput.value = "";
   }
@@ -266,6 +313,7 @@ pdfInput.addEventListener("change", async (event) => {
 previousButton.addEventListener("click", () => {
   if (currentPage > 0) {
     currentPage--;
+    pdfFiles[activePdfIndex].currentPage = currentPage;
     render();
   }
 });
@@ -273,6 +321,7 @@ previousButton.addEventListener("click", () => {
 nextButton.addEventListener("click", () => {
   if (currentPage < slips.length - 1) {
     currentPage++;
+    pdfFiles[activePdfIndex].currentPage = currentPage;
     render();
   }
 });
@@ -319,8 +368,12 @@ closeCustomerButton.addEventListener("click", () => {
 });
 
 newPdfButton.addEventListener("click", () => {
+  pdfFiles = [];
+  activePdfIndex = 0;
   slips = [];
   currentPage = 0;
+  pdfSelector.replaceChildren();
+  pdfSelector.hidden = true;
   viewer.hidden = true;
   uploadPanel.hidden = false;
   status.textContent = "";
