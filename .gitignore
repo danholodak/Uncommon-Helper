@@ -19,3 +19,8 @@ packing-slips.json
 # Logs
 *.log
 npm-debug.log*
+
+# Photoshop Files
+PhotoshopFiles/
+PhotoshopFiles.zip
+*.psd

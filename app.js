@@ -19,6 +19,7 @@ const closeCustomerButton = document.querySelector("#closeCustomerButton");
 const newPdfButton = document.querySelector("#newPdfButton");
 const status = document.querySelector("#status");
 const pdfSelector = document.querySelector("#pdfSelector");
+const downloadPhotoshopButton = document.querySelector("#downloadPhotoshopButton");
 
 let pdfFiles = [];
 let activePdfIndex = 0;
@@ -378,4 +379,14 @@ newPdfButton.addEventListener("click", () => {
   uploadPanel.hidden = false;
   status.textContent = "";
   pdfInput.click();
+});
+
+downloadPhotoshopButton.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = "https://drive.google.com/uc?export=download&id=1nnNfkC0w_uzqJUfS0qN2BrFm5pjqjYhX";
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  document.body.append(link);
+  link.click();
+  link.remove();
 });

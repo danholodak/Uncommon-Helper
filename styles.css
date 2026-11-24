@@ -203,6 +203,18 @@ button:disabled { opacity: 0.42; cursor: not-allowed; }
   gap: 12px;
 }
 
+.page-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #dedacf;
+}
+
+.page-footer button {
+  min-height: 44px;
+}
+
 @media (max-width: 650px) {
   .app { width: min(100% - 20px, 920px); padding: 24px 0; }
   .slip-card { padding: 18px; }
